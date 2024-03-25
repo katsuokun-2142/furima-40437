@@ -4,67 +4,58 @@
 ```mermaid
 erDiagram
   users ||--o{ items : "1人のユーザーは0以上の出品商品を持つ"
-  users ||--o{ purchase_records : "1人のユーザーは0以上の購入記録を持つ"
-  items ||--|| shipping_from_preferences : "1つの商品は1つの配送元の設定値を持つ"
-  items ||--o| purchase_records : "1つの商品は0か1の購入記録を持つ"
-  purchase_records ||--|| shipping_information : "1つの購入記録は1つの発送先情報を持つ"
+  users ||--o{ orders : "1人のユーザーは0以上の購入記録を持つ"
+  items ||--o| orders : "1つの商品は0か1の購入記録を持つ"
+  orders ||--|| shipping_informations : "1つの購入記録は1つの発送先情報を持つ"
 
   users {
     bigint id PK
-    string nickname "ニックネーム"
-    varchar email "メールアドレス"
-    varchar encrypted_password "パスワード"
-    string last_name "苗字"
-    string first_name "名前"
-    string furi_last_name "みょうじ"
-    string furi_first_name "なまえ"
-    date date_of_birth "生年月日"
+    string nickname           "ニックネーム"
+    string email              "メールアドレス"
+    string encrypted_password "パスワード"
+    string last_name          "苗字"
+    string first_name         "名前"
+    string furi_last_name     "みょうじ"
+    string furi_first_name    "なまえ"
+    date date_of_birth        "生年月日"
     timestamp created_at
     timestamp updated_at
   }
 
   items {
     bigint id PK
-    string item_name "商品名"
-    text description "説明"
-    integer category "カテゴリ"
-    integer condition "状態"
-    integer selling_price "販売価格"
-    references user FK
-    references shippinf_from_preferences FK
+    string item_name                 "商品名"
+    text description                 "説明"
+    integer category_id              "カテゴリ-ActiveHash"
+    integer condition_id             "状態-ActiveHash"
+    integer selling_price            "販売価格"
+    integer shipping_fee_category_id "配送料負担区分-ActiveHash"
+    integer state_province_id        "発送元地域-ActiveHash"
+    integer shipping_waiting_time_id "発送待機日数-ActiveHash"
+    references user FK               "ユーザー"
     timestamp created_at
     timestamp updated_at
   }
 
-  shipping_from_preferences {
+  orders {
     bigint id PK
-    integer shipping_fee_category "配送料負担区分"
-    integer shipping_area "発送元地域"
-    integer shipping_waiting_time "発送待機日数"
+    references user FK "購入者"
+    references item FK "購入品"
     timestamp created_at
     timestamp updated_at
   }
 
-  purchase_records {
+  shipping_informations {
     bigint id PK
-    references user FK
-    references item FK
-    references shipping_information FK
+    string zip_code           "郵便番号"
+    integer state_province_id "都道府県-ActiveHash"
+    string city_town_village  "市区町村"
+    string street_address     "番地"
+    string building_name      "建物名"
+    string phone_number       "電話番号"
+    references order          "購入記録"
     timestamp created_at
     timestamp updated_at
-  }
-
-  shipping_information {
-    bigint id PK
-    string zip_code "郵便番号"
-    string state_province "都道府県"
-    string city_town_village "市区町村"
-    string street_address "番地"
-    string building_name "建物名"
-    string phone_number "電話番号"
-    timestamp created_at
-    timestamp updated_at
-
   }
 ```
 
@@ -75,8 +66,8 @@ erDiagram
 | Column             | Type    | Options     |
 | ------------------ | ------- | ----------- |
 | nickname           | string  | null: false |
-| email              | varchar | null: false, unique: true |
-| encrypted_password | varchar | null: false |
+| email              | string  | null: false, unique: true |
+| encrypted_password | string  | null: false |
 | last_name          | string  | null: false |
 | first_name         | string  | null: false |
 | furi_last_name     | string  | null: false |
@@ -86,63 +77,52 @@ erDiagram
 ### Association
 
 - has_many :items
-- has_many :purchase_records
+- has_many :orders
 
 ## items（出品商品情報） テーブル
 
-| Column                    | Type        | Options     |
-| ------------------------- | ----------- | ----------- |
-| item_name                 | string      | null: false |
-| description               | description | null: false |
-| category                  | integer     | null: false |
-| condition                 | integer     | null: false |
-| selling_price             | integer     | null: false |
-| user                      | references  | null: false, foreign_key: true |
-| shippinf_from_preferences | references  | null: false, foreign_key: true |
+| Column                   | Type       | Options     |
+| ------------------------ | ---------- | ----------- |
+| item_name                | string     | null: false |
+| description              | text       | null: false |
+| category_id              | integer    | null: false |
+| condition_id             | integer    | null: false |
+| selling_price            | integer    | null: false |
+| shipping_fee_category_id | integer    | null: false |
+| state_province_id        | integer    | null: false |
+| shipping_waiting_time_id | integer    | null: false |
+| user                     | references | null: false, foreign_key: true |
 
 ### Association
 
 - belongs_to :user
-- has_one :purchase_record
-- has_one :shipping_from_preference
+- has_one :orders
 
-## shipping_from_preferences（発送元情報） テーブル
+## orders（購入記録） テーブル
 
-| Column                | Type    | Options     |
-| --------------------- | ------- | ----------- |
-| shipping_fee_category | integer | null: false |
-| shipping_area         | integer | null: false |
-| shipping_waiting_time | integer | null: false |
-
-### Association
-
-- belongs_to :item
-
-## purchase_records（購入記録） テーブル
-
-| Column               | Type       | Options                        |
-| -------------------- | ---------- | ------------------------------ |
-| user                 | references | null: false, foreign_key: true |
-| room                 | references | null: false, foreign_key: true |
-| shipping_information | references | null: false, foreign_key: true |
+| Column | Type       | Options                        |
+| ------ | ---------- | ------------------------------ |
+| user   | references | null: false, foreign_key: true |
+| room   | references | null: false, foreign_key: true |
 
 ### Association
 
 - belongs_to :user
 - belongs_to :item
-- has_one :shipping_information
+- has_one :shipping_informations
 
-## shipping_information（発送先情報） テーブル
+## shipping_informations（発送先情報） テーブル
 
-| Column            | Type   | Options     |
-| ----------------- | ------ | ----------- |
-| zip_code          | string | null: false |
-| state_province    | string | null: false |
-| city_town_village | string | null: false |
-| street_address    | string | null: false |
-| building_name     | string |             |
-| phone_number      | string | null: false |
+| Column            | Type       | Options     |
+| ----------------- | ---------- | ----------- |
+| zip_code          | string     | null: false |
+| state_province_id | integer    | null: false |
+| city_town_village | string     | null: false |
+| street_address    | string     | null: false |
+| building_name     | string     |             |
+| phone_number      | string     | null: false |
+| order             | references | null: false, foreign_key: true |
 
 ### Association
 
-- belongs_to :shipping_information
+- belongs_to :order
