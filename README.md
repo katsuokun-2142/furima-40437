@@ -96,20 +96,20 @@ erDiagram
 ### Association
 
 - belongs_to :user
-- has_one :orders
+- has_one :order
 
 ## orders（購入記録） テーブル
 
 | Column | Type       | Options                        |
 | ------ | ---------- | ------------------------------ |
 | user   | references | null: false, foreign_key: true |
-| room   | references | null: false, foreign_key: true |
+| item   | references | null: false, foreign_key: true |
 
 ### Association
 
 - belongs_to :user
 - belongs_to :item
-- has_one :shipping_informations
+- has_one :shipping_information
 
 ## shipping_informations（発送先情報） テーブル
 
