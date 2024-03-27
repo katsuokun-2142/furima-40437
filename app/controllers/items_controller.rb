@@ -4,6 +4,10 @@ class ItemsController < ApplicationController
   def index
   end
 
+  def new
+    # Item.
+  end
+
   private
 
   def basic_auth
