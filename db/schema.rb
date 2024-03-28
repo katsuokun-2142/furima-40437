@@ -10,16 +10,59 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_03_26_063754) do
+ActiveRecord::Schema[7.0].define(version: 2024_03_27_133136) do
+  create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
+    t.string "name", null: false
+    t.string "record_type", null: false
+    t.bigint "record_id", null: false
+    t.bigint "blob_id", null: false
+    t.datetime "created_at", null: false
+    t.index ["blob_id"], name: "index_active_storage_attachments_on_blob_id"
+    t.index ["record_type", "record_id", "name", "blob_id"], name: "index_active_storage_attachments_uniqueness", unique: true
+  end
+
+  create_table "active_storage_blobs", charset: "utf8", force: :cascade do |t|
+    t.string "key", null: false
+    t.string "filename", null: false
+    t.string "content_type"
+    t.text "metadata"
+    t.string "service_name", null: false
+    t.bigint "byte_size", null: false
+    t.string "checksum"
+    t.datetime "created_at", null: false
+    t.index ["key"], name: "index_active_storage_blobs_on_key", unique: true
+  end
+
+  create_table "active_storage_variant_records", charset: "utf8", force: :cascade do |t|
+    t.bigint "blob_id", null: false
+    t.string "variation_digest", null: false
+    t.index ["blob_id", "variation_digest"], name: "index_active_storage_variant_records_uniqueness", unique: true
+  end
+
+  create_table "items", charset: "utf8", force: :cascade do |t|
+    t.string "item_name", null: false, comment: "商品名"
+    t.text "description", null: false, comment: "説明"
+    t.integer "category_id", null: false, comment: "カテゴリ-ActiveHash"
+    t.integer "condition_id", null: false, comment: "状態-ActiveHash"
+    t.integer "selling_price", null: false, comment: "販売価格"
+    t.integer "shipping_fee_category_id", null: false, comment: "配送料負担区分-ActiveHash"
+    t.integer "state_province_id", null: false, comment: "発送元地域-ActiveHash"
+    t.integer "shipping_waiting_time_id", null: false, comment: "発送待機日数-ActiveHash"
+    t.bigint "user_id", null: false, comment: "出品者"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_items_on_user_id"
+  end
+
   create_table "users", charset: "utf8", force: :cascade do |t|
-    t.string "nickname", null: false
-    t.string "email", default: "", null: false
-    t.string "encrypted_password", default: "", null: false
-    t.string "last_name", null: false
-    t.string "first_name", null: false
-    t.string "furi_last_name", null: false
-    t.string "furi_first_name", null: false
-    t.date "date_of_birth", null: false
+    t.string "nickname", null: false, comment: "ニックネーム"
+    t.string "email", default: "", null: false, comment: "メールアドレス"
+    t.string "encrypted_password", default: "", null: false, comment: "パスワード"
+    t.string "last_name", null: false, comment: "苗字"
+    t.string "first_name", null: false, comment: "名前"
+    t.string "furi_last_name", null: false, comment: "みょうじ"
+    t.string "furi_first_name", null: false, comment: "なまえ"
+    t.date "date_of_birth", null: false, comment: "生年月日"
     t.string "reset_password_token"
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
@@ -29,4 +72,7 @@ ActiveRecord::Schema[7.0].define(version: 2024_03_26_063754) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "active_storage_attachments", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "active_storage_variant_records", "active_storage_blobs", column: "blob_id"
+  add_foreign_key "items", "users"
 end
