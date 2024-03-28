@@ -10,7 +10,7 @@ function commission_profit_calc (){
     const add_tax_price = document.getElementById('add-tax-price')
     add_tax_price.innerHTML = commission
     // 販売利益
-    let profit = value - commission
+    let profit = Math.floor(value - commission)
     const profit_price = document.getElementById('profit')
     profit_price.innerHTML = profit
   })
