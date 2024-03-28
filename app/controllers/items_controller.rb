@@ -10,11 +10,11 @@ class ItemsController < ApplicationController
   end
 
   def create
-    item = Item.create(item_params)
-    if item.save
-
+    @item = Item.create(item_params)
+    if @item.save
+      redirect_to root_path
     else
-
+      render :new
     end
   end
 
@@ -36,8 +36,7 @@ class ItemsController < ApplicationController
                                   :shipping_fee_category_id,
                                   :state_province_id,
                                   :shipping_waiting_time_id,
-                                  :image)
-                                  .merge(user_id: current_user.id)
+                                  :image).merge(user_id: current_user.id)
   end
   
 end
