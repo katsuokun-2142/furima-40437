@@ -1,11 +1,12 @@
 class Item < ApplicationRecord
   extend ActiveHash::Associations::ActiveRecordExtensions
-  belongs_to :category
-  belongs_to :condition
-  belongs_to :shipping_fee_category
-  belongs_to :state_province
-  belongs_to :shipping_waiting_time
+  belongs_to       :category
+  belongs_to       :condition
+  belongs_to       :shipping_fee_category
+  belongs_to       :state_province
+  belongs_to       :shipping_waiting_time
   has_one_attached :image
+  belongs_to       :user
 
   # ActiveHashのバリデーション
   # ActiveHashの選択が「---」の時は保存できないようにする
