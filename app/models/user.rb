@@ -31,21 +31,21 @@ class User < ApplicationRecord
   private
 
   def both_name_present
-    errors.add(:base, "苗字と名前が必要です") unless last_name.present? && first_name.present?
+    errors.add(:base, '苗字と名前が必要です') unless last_name.present? && first_name.present?
   end
   def both_furi_name_present
-    errors.add(:base, "苗字と名前のふりがなが必要です") unless furi_last_name.present? && furi_first_name.present?
+    errors.add(:base, '苗字と名前のふりがなが必要です') unless furi_last_name.present? && furi_first_name.present?
   end
   NAME_REGEX = /\A[ぁ-んァ-ヶ一-龥々ー]+\z/.freeze
   def custom_name_error_message
-    if (last_name.present? && !last_name.match(NAME_REGEX))||(first_name.present? && !first_name.match(NAME_REGEX))
-      errors.add(:base, "お名前(全角)には全角（漢字・ひらがな・カタカナ）で設定してください") 
+    if (last_name.present? && !last_name.match(NAME_REGEX)) || (first_name.present? && !first_name.match(NAME_REGEX))
+      errors.add(:base, 'お名前(全角)には全角（漢字・ひらがな・カタカナ）で設定してください')
     end
   end
   KANA_REGEX = /\A[ァ-ヶー]+\z/.freeze
   def custom_kana_error_message
-    if (furi_last_name.present? && !furi_last_name.match(KANA_REGEX))||(furi_first_name.present? && !furi_first_name.match(KANA_REGEX))
-      errors.add(:base, "お名前カナ(全角)には全角（カタカナ）で設定してください") 
+    if (furi_last_name.present? && !furi_last_name.match(KANA_REGEX)) || (furi_first_name.present? && !furi_first_name.match(KANA_REGEX))
+      errors.add(:base, 'お名前カナ(全角)には全角（カタカナ）で設定してください')
     end
   end
 
