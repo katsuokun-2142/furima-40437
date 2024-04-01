@@ -1,5 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
+  before_action :load_item, only: [:show, :edit, :update]
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -19,8 +20,31 @@ class ItemsController < ApplicationController
   end
 
   def show
-    @item = Item.find(params[:id])
   end
+
+  def edit
+    return if current_user.id == @item.user.id
+
+    redirect_to action: :index
+    # unless current_user.id == @item.user.id
+    #     redirect_to action: :index
+    # end
+  end
+
+  def update
+    if @item.update(item_params)
+      redirect_to item_path(params[:id])
+    else
+      render :edit, status: :unprocessable_entity
+    end
+  end
+
+  # def delete
+  #   @item = Item.find(params[:id])
+  #   if @item.destroy
+
+  #   end
+  # end
 
   private
 
@@ -36,5 +60,9 @@ class ItemsController < ApplicationController
                                   :shipping_waiting_time_id,
                                   :image).merge(user_id: current_user.id)
   end
-  
+
+  # itemの読み出し
+  def load_item
+    @item = Item.find(params[:id])
+  end
 end
