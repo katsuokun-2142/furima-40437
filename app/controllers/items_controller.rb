@@ -22,6 +22,29 @@ class ItemsController < ApplicationController
     @item = Item.find(params[:id])
   end
 
+  def edit
+    @item = Item.find(params[:id])
+    unless current_user.id == @item.user.id
+      redirect_to action: :index
+    end
+  end
+
+  def update
+    @item = Item.find(params[:id])
+    if @item.update(item_params)
+      redirect_to item_path(params[:id])
+    else
+      render :edit
+    end
+  end
+
+  # def delete
+  #   @item = Item.find(params[:id])
+  #   if @item.destroy
+
+  #   end
+  # end
+
   private
 
   # ストロングパラメータ（画像保存）
