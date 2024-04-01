@@ -39,12 +39,14 @@ class ItemsController < ApplicationController
     end
   end
 
-  # def delete
-  #   @item = Item.find(params[:id])
-  #   if @item.destroy
-
-  #   end
-  # end
+  def destroy
+    @item = Item.find(params[:id])
+    if @item.destroy
+      redirect_to items_path
+    else
+      render :show, status: :unprocessable_entity
+    end
+  end
 
   private
 
