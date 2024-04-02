@@ -40,6 +40,10 @@ class ItemsController < ApplicationController
   end
 
   def destroy
+    unless user_signed_in? && current_user.id == @item.user.id
+      render :show, status: :unprocessable_entity
+    end
+    
     if @item.destroy
       redirect_to root_path
     else
