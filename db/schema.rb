@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2024_04_03_083946) do
+ActiveRecord::Schema[7.0].define(version: 2024_04_03_085124) do
   create_table "active_storage_attachments", charset: "utf8", force: :cascade do |t|
     t.string "name", null: false
     t.string "record_type", null: false
@@ -63,6 +63,19 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_03_083946) do
     t.index ["user_id"], name: "index_orders_on_user_id"
   end
 
+  create_table "shipping_informations", charset: "utf8", force: :cascade do |t|
+    t.string "zip_code", null: false, comment: "郵便番号"
+    t.integer "state_province_id", null: false, comment: "都道府県-ActiveHash"
+    t.string "city_town_village", null: false, comment: "市区町村"
+    t.string "street_address", null: false, comment: "番地"
+    t.string "building_name", comment: "建物名"
+    t.string "phone_number", null: false, comment: "電話番号"
+    t.bigint "order_id", null: false, comment: "購入記録"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["order_id"], name: "index_shipping_informations_on_order_id"
+  end
+
   create_table "users", charset: "utf8", force: :cascade do |t|
     t.string "nickname", null: false, comment: "ニックネーム"
     t.string "email", default: "", null: false, comment: "メールアドレス"
@@ -86,4 +99,5 @@ ActiveRecord::Schema[7.0].define(version: 2024_04_03_083946) do
   add_foreign_key "items", "users"
   add_foreign_key "orders", "items"
   add_foreign_key "orders", "users"
+  add_foreign_key "shipping_informations", "orders"
 end
