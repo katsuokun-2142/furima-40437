@@ -7,6 +7,7 @@ class Item < ApplicationRecord
   belongs_to       :shipping_waiting_time
   has_one_attached :image
   belongs_to       :user
+  has_one          :order
 
   # ActiveHashのバリデーション
   # ActiveHashの選択が「---」の時は保存できないようにする
