@@ -1,6 +1,6 @@
 class ItemsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
-  before_action :load_item, only: [:show, :edit, :update, :destroy]
+  # before_action :load_item, only: [:show]
 
   def index
     @items = Item.includes(:user).order('created_at DESC')
@@ -20,18 +20,29 @@ class ItemsController < ApplicationController
   end
 
   def show
+    load_item
   end
 
   def edit
+    if Order.exists?(item_id: params[:id])
+      redirect_to root_path and return
+    end
+
+    load_item
     return if current_user.id == @item.user.id
 
-    redirect_to action: :index
+    redirect_to root_path
     # unless current_user.id == @item.user.id
     #     redirect_to action: :index
     # end
   end
 
   def update
+    if Order.exists?(item_id: params[:id])
+      redirect_to root_path and return
+    end
+
+    load_item
     if @item.update(item_params)
       redirect_to item_path(params[:id])
     else
@@ -40,6 +51,11 @@ class ItemsController < ApplicationController
   end
 
   def destroy
+    if Order.exists?(item_id: params[:id])
+      redirect_to root_path and return
+    end
+    
+    load_item
     unless user_signed_in? && current_user.id == @item.user.id
       render :show, status: :unprocessable_entity
     end
