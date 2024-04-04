@@ -1,11 +1,18 @@
 class OrdersController < ApplicationController
   def index
     @item = Item.find(params[:item_id])
-    @order_shipping_information = OrderShippingInformation.new# Formオブジェクトを追加
+    @order_shipping_information = OrderShippingInformation.new
   end
 
   def create
     binding.pry
+    @order_shipping_information = OrderShippingInformation.new(order_shipping_information_params)
+    if @order_shipping_information.valid?
+      @order_shipping_information.save
+      redirect_to root_path
+    else
+      render :index, status: :unprocessable_entity
+    end
   end
 
   private
