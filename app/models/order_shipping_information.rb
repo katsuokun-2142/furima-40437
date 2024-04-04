@@ -4,7 +4,17 @@ class OrderShippingInformation
 
   # バリデーション
   with_options presence: true do
+    # 購入記録
+    validates :item_id, :user_id
+    # 発送先情報
+    validates :zip_code, format: {with: /\A\d{3}-\d{4}\z/, message: "is invalid. Include hyphen(-)"}
+    validates :phone_number, format: {with: /\A\d{10,11}\z/, message: "is invalid. Does not contain a hyphen (-)"}
+    validates :city_town_village, :street_address
   end
+  # 発送先情報
+  validates :state_province_id, numericality: { other_than: 1, message: "can't be blank" } 
+  # 購入記録
+  validate :item_must_be_unique
 
   def save
     # 購入記録を保存し、変数orderに代入する
@@ -18,5 +28,13 @@ class OrderShippingInformation
                                 building_name: building_name,
                                 phone_number: phone_number,
                                 order_id: order.id)
+  end
+
+  private
+
+  def item_must_be_unique
+    if Order.exists?(item_id: item_id)
+      errors.add(:base, "商品はすでに売り切れです。")
+    end
   end
 end

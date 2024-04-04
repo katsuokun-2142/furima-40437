@@ -1,16 +1,24 @@
 class OrdersController < ApplicationController
+  before_action :authenticate_user!
+
   def index
+    if Item.exists?(id: params[:item_id], user_id: current_user.id)
+      redirect_to root_path and return
+    end
+    if Order.exists?(item_id: params[:item_id])
+      redirect_to root_path and return
+    end
     @item = Item.find(params[:item_id])
     @order_shipping_information = OrderShippingInformation.new
   end
 
   def create
-    binding.pry
     @order_shipping_information = OrderShippingInformation.new(order_shipping_information_params)
     if @order_shipping_information.valid?
       @order_shipping_information.save
       redirect_to root_path
     else
+      @item = Item.find(params[:item_id])
       render :index, status: :unprocessable_entity
     end
   end
