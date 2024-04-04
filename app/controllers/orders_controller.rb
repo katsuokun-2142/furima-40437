@@ -23,7 +23,6 @@ class OrdersController < ApplicationController
     else
       gon.public_key = ENV['PAYJP_PUBLIC_KEY']
       @item = Item.find(params[:item_id])
-      @order_shipping_information = OrderShippingInformation.new(order_shipping_information_params)
       render :index, status: :unprocessable_entity
     end
   end

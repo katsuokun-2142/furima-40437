@@ -17,7 +17,7 @@ class OrderShippingInformation
     validates :item_id, :user_id
     # 発送先情報
     validates :zip_code,                          format: { with: /\A\d{3}-\d{4}\z/, message: 'is invalid. Include hyphen(-), for example 999-9999.' }
-    validates :phone_number,                      format: { with: /\A\d{ 10, 11 }\z/, message: 'is invalid. Does not contain a hyphen (-)' }
+    validates :phone_number,                      format: { with: /\A\d{10,11}\z/, message: 'is invalid. Does not contain a hyphen (-)' }
     validates :state_province_id,                 numericality: { other_than: 1, message: 'is not selected' } 
     validates :city_town_village, :street_address
     validates :token
