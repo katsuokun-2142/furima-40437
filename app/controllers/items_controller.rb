@@ -54,12 +54,12 @@ class ItemsController < ApplicationController
     if Order.exists?(item_id: params[:id])
       redirect_to root_path and return
     end
-    
+
     load_item
     unless user_signed_in? && current_user.id == @item.user.id
       render :show, status: :unprocessable_entity
     end
-    
+
     if @item.destroy
       redirect_to root_path
     else

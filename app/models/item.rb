@@ -15,7 +15,7 @@ class Item < ApplicationRecord
             :condition_id,
             :shipping_fee_category_id,
             :state_province_id,
-            :shipping_waiting_time_id, numericality: { other_than: 1, message: "can't be blank" }
+            :shipping_waiting_time_id, numericality: { other_than: 1, message: "is not selected" }
 
   validates :image, :item_name, :description, presence: true
   INTETGER_REGEX = /\A\d+\z/.freeze

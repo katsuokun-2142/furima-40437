@@ -39,7 +39,9 @@ RSpec.describe OrderShippingInformation, type: :model do
       end
       it '商品が売り切れの場合、保存できないこと' do
         another_user = FactoryBot.create(:user)
-        another_order_shipping_information = FactoryBot.build(:order_shipping_information, user_id: another_user.id, item_id: @order_shipping_information.item_id)
+        another_order_shipping_information = FactoryBot.build(:order_shipping_information,
+                                                              user_id: another_user.id,
+                                                              item_id: @order_shipping_information.item_id)
         @order_shipping_information.save
         another_order_shipping_information.valid?
         expect(another_order_shipping_information.errors.full_messages).to include('商品はすでに売り切れです。')
@@ -80,11 +82,11 @@ RSpec.describe OrderShippingInformation, type: :model do
         @order_shipping_information.valid?
         expect(@order_shipping_information.errors.full_messages).to include('Zip code is invalid. Include hyphen(-), for example 999-9999.')
         sleep 0.5
-     end
+      end
       it '都道府県を選択していない場合、保存できないこと' do
         @order_shipping_information.state_province_id = 1
         @order_shipping_information.valid?
-        expect(@order_shipping_information.errors.full_messages).to include("State province is not selected")
+        expect(@order_shipping_information.errors.full_messages).to include('State province is not selected')
         sleep 0.5
       end
       it '都道府県の値がない場合、保存できないこと' do
@@ -114,7 +116,7 @@ RSpec.describe OrderShippingInformation, type: :model do
       it '電話番号が9桁の場合、保存できないこと' do
         @order_shipping_information.phone_number = '123456789'
         @order_shipping_information.valid?
-        expect(@order_shipping_information.errors.full_messages).to include("Phone number is invalid. Does not contain a hyphen (-)")
+        expect(@order_shipping_information.errors.full_messages).to include('Phone number is invalid. Does not contain a hyphen (-)')
         sleep 0.5
       end
       it '電話番号が12桁の場合、保存できないこと' do
