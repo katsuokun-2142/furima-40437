@@ -1,11 +1,8 @@
 class OrdersController < ApplicationController
-  before_action :authenticate_user!, except: [:index]
+  before_action :authenticate_user!
   before_action :load_item, only: [:index, :create]
 
   def index
-    unless user_signed_in?
-      redirect_to root_path and return
-    end
     if Item.exists?(id: params[:item_id], user_id: current_user.id)
       redirect_to root_path and return
     end
