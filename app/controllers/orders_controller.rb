@@ -1,5 +1,6 @@
 class OrdersController < ApplicationController
   before_action :authenticate_user!, except: [:index]
+  before_action :load_item, only: [:index, :create]
 
   def index
     unless user_signed_in?
@@ -12,7 +13,6 @@ class OrdersController < ApplicationController
       redirect_to root_path and return
     end
     gon.public_key = ENV['PAYJP_PUBLIC_KEY']
-    @item = Item.find(params[:item_id])
     @order_shipping_information = OrderShippingInformation.new
   end
 
@@ -25,7 +25,6 @@ class OrdersController < ApplicationController
       redirect_to root_path
     else
       gon.public_key = ENV['PAYJP_PUBLIC_KEY']
-      @item = Item.find(params[:item_id])
       render :index, status: :unprocessable_entity
     end
   end
@@ -53,4 +52,9 @@ class OrdersController < ApplicationController
       currency: 'jpy'                                       # 通貨の種類（日本円）
     )
   end
+
+    # itemの読み出し
+    def load_item
+      @item = Item.find(params[:item_id])
+    end
 end
