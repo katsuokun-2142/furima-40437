@@ -3,7 +3,7 @@ FactoryBot.define do
     # サンプルデータ準備
     item_name                { Faker::Games::Pokemon.name }
     description              { Faker::Lorem.sentence }
-    category_id              { Faker::Number.between(from: 2, to: 11) }
+    category_id              { Faker::Number.between(from: 2, to: 12) }
     condition_id             { Faker::Number.between(from: 2, to: 7) }
     selling_price            { Faker::Number.between(from: 300, to: 9_999_999) }
     shipping_fee_category_id { Faker::Number.between(from: 2, to: 3) }

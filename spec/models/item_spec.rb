@@ -30,52 +30,52 @@ RSpec.describe Item, type: :model do
       it 'カテゴリが「---」では登録できない' do
         @item.category_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Category can't be blank")
+        expect(@item.errors.full_messages).to include('Category is not selected')
       end
       it 'カテゴリが空では登録できない' do
         @item.category_id = ''
         @item.valid?
-        expect(@item.errors.full_messages).to include("Category can't be blank")
+        expect(@item.errors.full_messages).to include('Category is not selected')
       end
       it '商品状態が「---」では登録できない' do
         @item.condition_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Condition can't be blank")
+        expect(@item.errors.full_messages).to include('Condition is not selected')
       end
       it '商品状態が空では登録できない' do
         @item.condition_id = ''
         @item.valid?
-        expect(@item.errors.full_messages).to include("Condition can't be blank")
+        expect(@item.errors.full_messages).to include('Condition is not selected')
       end
       it '配送料の負担の情報が「---」では登録できない' do
         @item.shipping_fee_category_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Shipping fee category can't be blank")
+        expect(@item.errors.full_messages).to include('Shipping fee category is not selected')
       end
       it '配送料の負担の情報が空では登録できない' do
         @item.shipping_fee_category_id = ''
         @item.valid?
-        expect(@item.errors.full_messages).to include("Shipping fee category can't be blank")
+        expect(@item.errors.full_messages).to include('Shipping fee category is not selected')
       end
       it '発送元の地域の情報が「---」では登録できない' do
         @item.state_province_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("State province can't be blank")
+        expect(@item.errors.full_messages).to include('State province is not selected')
       end
       it '発送元の地域の情報が空では登録できない' do
         @item.state_province_id = ''
         @item.valid?
-        expect(@item.errors.full_messages).to include("State province can't be blank")
+        expect(@item.errors.full_messages).to include('State province is not selected')
       end
       it '発送までの日数の情報が「---」では登録できない' do
         @item.shipping_waiting_time_id = 1
         @item.valid?
-        expect(@item.errors.full_messages).to include("Shipping waiting time can't be blank")
+        expect(@item.errors.full_messages).to include('Shipping waiting time is not selected')
       end
       it '発送までの日数の情報が空では登録できない' do
         @item.shipping_waiting_time_id = ''
         @item.valid?
-        expect(@item.errors.full_messages).to include("Shipping waiting time can't be blank")
+        expect(@item.errors.full_messages).to include('Shipping waiting time is not selected')
       end
       it '価格が空では登録できない' do
         @item.selling_price = ''
