@@ -7,6 +7,7 @@ class Item < ApplicationRecord
   belongs_to       :shipping_waiting_time
   has_one_attached :image
   belongs_to       :user
+  has_one          :order
 
   # ActiveHashのバリデーション
   # ActiveHashの選択が「---」の時は保存できないようにする
@@ -14,7 +15,7 @@ class Item < ApplicationRecord
             :condition_id,
             :shipping_fee_category_id,
             :state_province_id,
-            :shipping_waiting_time_id, numericality: { other_than: 1, message: "can't be blank" }
+            :shipping_waiting_time_id, numericality: { other_than: 1, message: "is not selected" }
 
   validates :image, :item_name, :description, presence: true
   INTETGER_REGEX = /\A\d+\z/.freeze

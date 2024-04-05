@@ -85,32 +85,32 @@ RSpec.describe Item, type: :model do
       it '価格が300より小さい場合、登録できない' do
         @item.selling_price = 299
         @item.valid?
-        expect(@item.errors.full_messages).to include("Selling price must be greater than or equal to 300")
+        expect(@item.errors.full_messages).to include('Selling price must be greater than or equal to 300')
       end
       it '価格が9999999より大きい場合、登録できない' do
-        @item.selling_price = 10000000
+        @item.selling_price = 10_000_000
         @item.valid?
-        expect(@item.errors.full_messages).to include("Selling price must be less than or equal to 9999999")
+        expect(@item.errors.full_messages).to include('Selling price must be less than or equal to 9999999')
       end
       it '価格に全角が含まれているの場合、登録できない' do
         @item.selling_price = '全角'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Selling price is not a number")
+        expect(@item.errors.full_messages).to include('Selling price is not a number')
       end
       it '価格に半角英字が含まれているの場合、登録できない' do
         @item.selling_price = 'test'
         @item.valid?
-        expect(@item.errors.full_messages).to include("Selling price is not a number")
+        expect(@item.errors.full_messages).to include('Selling price is not a number')
       end
       it '価格が少数の場合、登録できない' do
         @item.selling_price = 300.5
         @item.valid?
-        expect(@item.errors.full_messages).to include("Selling price must be an integer")
+        expect(@item.errors.full_messages).to include('Selling price must be an integer')
       end
       it 'Userテーブルと紐づいていない場合、登録できない' do
         @item.user = nil
         @item.valid?
-        expect(@item.errors.full_messages).to include("User must exist")
+        expect(@item.errors.full_messages).to include('User must exist')
       end
     end
   end
