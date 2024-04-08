@@ -1,4 +1,5 @@
 FactoryBot.define do
+  # Faker::Config.local=:ja
   factory :user do
     japanese_user = Gimei.name
 
